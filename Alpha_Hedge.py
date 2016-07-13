@@ -48,10 +48,10 @@ def price_change():    # same as pdiff
 
 while True:
     try:
-        eur_usd = alpha.get_history(instrument="XAU_USD",
+        eur_usd = alpha.get_history(instrument="EUR_USD",
                                       granularity='S5',
                                       count = 50,)
-        eur_usd_M5 = alpha.get_history(instrument="XAU_USD",
+        eur_usd_M5 = alpha.get_history(instrument="EUR_USD",
                                       granularity='M1',
                                       count = 50,)
         hist_tick_data = pd.DataFrame(eur_usd['candles'],
@@ -62,8 +62,8 @@ while True:
         mid_prices = (hist_tick_data['closeAsk']+hist_tick_data['closeBid'])/2.
         mid_prices_M5 = (hist_tick_data_M5['closeAsk']+hist_tick_data_M5['closeBid'])/2.
     
-        ask = alpha.get_prices(instruments="XAU_USD")['prices'][0]['ask']
-        bid = alpha.get_prices(instruments="XAU_USD")['prices'][0]['bid']
+        ask = alpha.get_prices(instruments="EUR_USD")['prices'][0]['ask']
+        bid = alpha.get_prices(instruments="EUR_USD")['prices'][0]['bid']
         spread = (abs(ask-bid))
         mid_price = (ask+bid)/2.
         
@@ -78,7 +78,7 @@ while True:
 
         if hist_tick_data['volume'][49]>35 and (SIGNAL_1[2][49])>0 and (SIGNAL_2[2][49]>0)  and invested() == []:
             alpha.create_order(account_id=account_number,
-                        instrument='XAU_USD',
+                        instrument='EUR_USD',
                         units= 4,
                         side='buy',
                         type='market',
@@ -87,7 +87,7 @@ while True:
     
         elif hist_tick_data['volume'][49]>35 and (SIGNAL_1[2][49])<0 and (SIGNAL_2[2][49]<0)  and invested() == []:
             alpha.create_order(account_id=account_number,
-                        instrument='XAU_USD',
+                        instrument='EUR_USD',
                         units= 4,
                         side='sell',
                         takeProfit=round(target_sell,3),
@@ -98,7 +98,7 @@ while True:
             alpha.close_position(account_id=account_number,instrument="XAU_USD")
             if price_change()==True:
                 alpha.create_order(account_id=account_number,
-                        instrument='XAU_USD',
+                        instrument='EUR_USD',
                         units= 4,
                         side='buy',
                         type='market',
@@ -107,7 +107,7 @@ while True:
                 
             else:
                 alpha.create_order(account_id=account_number,
-                        instrument='XAU_USD',
+                        instrument='EUR_USD',
                         units= 4,
                         side='sell',
                         takeProfit=round(target_sell,3),
