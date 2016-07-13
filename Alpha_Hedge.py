@@ -76,7 +76,7 @@ while True:
         SIGNAL_1 = macd(mid_prices,3,9,12,26)
         SIGNAL_2 = macd(mid_prices_M5,3,9,12,26)
 
-        if hist_tick_data['volume'][49]>35 and (SIGNAL_1[2][49])>0 and (SIGNAL_2[2][49]>0)  and invested() == []:
+        if hist_tick_data['volume'][49]>5 and (SIGNAL_1[2][49])>0 and (SIGNAL_2[2][49]>0)  and invested() == []:
             alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
                         units= 4,
@@ -85,7 +85,7 @@ while True:
                         takeProfit=round(target_buy,3),
                         stopLoss=round(stop_loss_buy,3))
     
-        elif hist_tick_data['volume'][49]>35 and (SIGNAL_1[2][49])<0 and (SIGNAL_2[2][49]<0)  and invested() == []:
+        elif hist_tick_data['volume'][49]>5 and (SIGNAL_1[2][49])<0 and (SIGNAL_2[2][49]<0)  and invested() == []:
             alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
                         units= 4,
