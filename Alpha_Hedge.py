@@ -36,7 +36,7 @@ def BB(dataFrame,period,n):
 def price_change():    # same as pdiff
     bool_ = np.diff(mid) > 0
     return bool_
-        
+
 # Run simulated trades on demo account
 
 while True:
@@ -61,8 +61,8 @@ while True:
         mid_price = (ask+bid)/2.
         
         
-        target_buy = BB(mid_prices,26,2.5)[0][49]
-        target_sell = BB(mid_prices,26,2.5)[2][49]
+        target_buy = BB(mid_prices,26,3.6)[0][49]
+        target_sell = BB(mid_prices,26,3.6)[2][49]
         stop_loss_buy = BB(mid_prices,26,2)[2][49] # Stop loss at 3 std of historical revese order flow 
         stop_loss_sell = BB(mid_prices,26,2)[0][49] # Stop loss at 3 std of historical revese order flow
         
