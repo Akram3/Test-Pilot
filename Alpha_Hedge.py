@@ -68,10 +68,10 @@ while True:
         mid_price = (ask+bid)/2.
         
         
-        target_buy = BB(mid_prices,26,2.4)[0][49]
-        target_sell = BB(mid_prices,26,2.4)[2][49]
-        stop_loss_buy = BB(bid,26,2)[0][49] # Stop loss at 3 std of historical revese order flow 
-        stop_loss_sell = BB(ask,26,2)[2][49] # Stop loss at 3 std of historical revese order flow
+        target_buy = BB(mid_prices,26,2.5)[0][49]
+        target_sell = BB(mid_prices,26,2.5)[2][49]
+        stop_loss_buy = BB(mid_prices,26,2)[0][49] # Stop loss at 3 std of historical revese order flow 
+        stop_loss_sell = BB(mid_prices,26,2)[2][49] # Stop loss at 3 std of historical revese order flow
         
         SIGNAL_1 = macd(mid_prices,3,9,12,26)
         SIGNAL_2 = macd(mid_prices_M5,3,9,12,26)
