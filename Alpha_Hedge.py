@@ -7,9 +7,6 @@ import pandas as pd
 import oandapy 
 import os 
 from datetime import datetime, timedelta
-from v20.authorization import EntitySpec
-
-import time
 
 account_number =2572666
 access_token = "5bc15f7110f8c9017e81e784a41b73e8-816783705fe8edb29bd0829451bb5eb6"
