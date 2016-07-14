@@ -68,10 +68,10 @@ while True:
         mid_price = (ask+bid)/2.
         
         
-        target_buy = BB(mid_prices,26,2)[0][49]
-        target_sell = BB(mid_prices,26,2)[2][49]
-        stop_loss_buy = BB(mid_prices,26,1.95)[0][49] # Stop loss at 3 std of historical revese order flow 
-        stop_loss_sell = BB(mid_prices,26,1.965)[2][49] # s
+        target_buy = BB(mid_prices,26,2.4)[0][49]
+        target_sell = BB(mid_prices,26,2.4)[2][49]
+        stop_loss_buy = BB(bid,26,2)[0][49] # Stop loss at 3 std of historical revese order flow 
+        stop_loss_sell = BB(ask,26,2)[2][49] # Stop loss at 3 std of historical revese order flow
         
         SIGNAL_1 = macd(mid_prices,3,9,12,26)
         SIGNAL_2 = macd(mid_prices_M5,3,9,12,26)
@@ -79,7 +79,7 @@ while True:
         if hist_tick_data['volume'][49]>1 and (SIGNAL_1[2][49])>0 and (SIGNAL_2[2][49]>0)  and invested() == []:
             alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
-                        units= 4,
+                        units= 100,
                         side='buy',
                         type='market',
                         takeProfit=round(target_buy,3),
@@ -88,27 +88,27 @@ while True:
         elif hist_tick_data['volume'][49]>1 and (SIGNAL_1[2][49])<0 and (SIGNAL_2[2][49]<0)  and invested() == []:
             alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
-                        units= 4,
+                        units= 100,
                         side='sell',
                         takeProfit=round(target_sell,3),
                         type='market',
-                        stopLoss=round(stop_loss_buy,3))
+                        stopLoss=round(stop_loss_sell,3))
 
         elif invested() != [] and SIGNAL_2[1][49]==0:
             alpha.close_position(account_id=account_number,instrument="XAU_USD")
             if price_change()==True:
                 alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
-                        units= 4,
+                        units= 100,
                         side='buy',
                         type='market',
                         takeProfit=round(target_buy,3),
-                        stopLoss=round(stop_loss_sell,3))
+                        stopLoss=round(stop_loss_buy,3))
                 
             else:
                 alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
-                        units= 4,
+                        units= 100,
                         side='sell',
                         takeProfit=round(target_sell,3),
                         type='market',
