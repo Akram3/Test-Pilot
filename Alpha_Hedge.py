@@ -7,9 +7,13 @@ import pandas as pd
 import oandapy 
 import os 
 from datetime import datetime, timedelta
+import pymc3 as pm
+from theano import shared
+from pymc3.distributions.timeseries import GaussianRandomWalk
+from scipy import optimize
 
 account_number =2572666
-access_token = "5bc15f7110f8c9017e81e784a41b73e8-816783705fe8edb29bd0829451bb5eb6"
+access_token = ""
 
 trade_expire = datetime.now() + timedelta(days=1) # For limit order use 
 trade_expire = trade_expire.isoformat('T') + 'Z'  # Try Different order types
@@ -36,7 +40,22 @@ def BB(dataFrame,period,n):
 def price_change():    # same as pdiff
     bool_ = np.diff(mid) > 0
     return bool_
+#Fit Model
+LARGE_NUMBER = 1e5
 
+model = pm.Model()
+with model:
+    smoothing_param = shared(0.9)
+    mu = pm.Normal("mu", sd=LARGE_NUMBER)
+    tau = pm.Exponential("tau", 1.0/LARGE_NUMBER)
+    z = GaussianRandomWalk("z",
+                           mu=mu,
+                           tau=tau / (1.0 - smoothing_param),
+                           shape=y.shape)
+    obs = pm.Normal("obs",
+                    mu=z,
+                    tau=tau / smoothing_param,
+                    observed=y)        
 # Run simulated trades on demo account
 
 while True:
@@ -61,8 +80,8 @@ while True:
         mid_price = (ask+bid)/2.
         
         
-        target_buy = BB(mid_prices,26,3.6)[0][49]
-        target_sell = BB(mid_prices,26,3.6)[2][49]
+        target_buy = BB(mid_prices,26,2.5)[0][49]
+        target_sell = BB(mid_prices,26,2.5)[2][49]
         stop_loss_buy = BB(mid_prices,26,2)[2][49] # Stop loss at 3 std of historical revese order flow 
         stop_loss_sell = BB(mid_prices,26,2)[0][49] # Stop loss at 3 std of historical revese order flow
         
