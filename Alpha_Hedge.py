@@ -14,8 +14,8 @@ import time
 account_number =2572666
 access_token = "5bc15f7110f8c9017e81e784a41b73e8-816783705fe8edb29bd0829451bb5eb6"
 
-trade_expire = datetime.now() + timedelta(days=1)
-trade_expire = trade_expire.isoformat('T') + 'Z'
+trade_expire = datetime.now() + timedelta(days=1) # For limit order use 
+trade_expire = trade_expire.isoformat('T') + 'Z'  # Try Different order types
 
 alpha = oandapy.API(environment="practice" , access_token=access_token)
 
@@ -40,10 +40,6 @@ def price_change():    # same as pdiff
     bool_ = np.diff(mid) > 0
     return bool_
         
-#from pykalman import KalmanFilter
-#kf = KalmanFilter(initial_state_mean=0,n_dim_obs=2)
-#measurements = zip(mid_prices,range(len(mid_prices)))
-
 # Run simulated trades on demo account
 
 while True:
@@ -64,7 +60,7 @@ while True:
     
         ask = alpha.get_prices(instruments="EUR_USD")['prices'][0]['ask']
         bid = alpha.get_prices(instruments="EUR_USD")['prices'][0]['bid']
-        spread = (abs(ask-bid))
+        spread = (abs(ask-bid)) #Spread needs to be used to detect liquidity 
         mid_price = (ask+bid)/2.
         
         
