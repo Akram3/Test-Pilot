@@ -12,8 +12,8 @@ from theano import shared
 from pymc3.distributions.timeseries import GaussianRandomWalk
 from scipy import optimize
 
-account_number =2572666
-access_token = ""
+account_number = os.getenv("practice_number")
+access_token = os.getenv("practice_access_token")
 
 trade_expire = datetime.now() + timedelta(days=1) # For limit order use 
 trade_expire = trade_expire.isoformat('T') + 'Z'  # Try Different order types
@@ -41,21 +41,7 @@ def price_change():    # same as pdiff
     bool_ = np.diff(mid) > 0
     return bool_
 #Fit Model
-LARGE_NUMBER = 1e5
 
-model = pm.Model()
-with model:
-    smoothing_param = shared(0.9)
-    mu = pm.Normal("mu", sd=LARGE_NUMBER)
-    tau = pm.Exponential("tau", 1.0/LARGE_NUMBER)
-    z = GaussianRandomWalk("z",
-                           mu=mu,
-                           tau=tau / (1.0 - smoothing_param),
-                           shape=y.shape)
-    obs = pm.Normal("obs",
-                    mu=z,
-                    tau=tau / smoothing_param,
-                    observed=y)        
 # Run simulated trades on demo account
 
 while True:
@@ -80,8 +66,8 @@ while True:
         mid_price = (ask+bid)/2.
         
         
-        target_buy = BB(mid_prices,26,2.5)[0][49]
-        target_sell = BB(mid_prices,26,2.5)[2][49]
+        target_buy = BB(mid_prices,26,3.5)[0][49]
+        target_sell = BB(mid_prices,26,3.5)[2][49]
         stop_loss_buy = BB(mid_prices,26,2)[2][49] # Stop loss at 3 std of historical revese order flow 
         stop_loss_sell = BB(mid_prices,26,2)[0][49] # Stop loss at 3 std of historical revese order flow
         
@@ -91,7 +77,7 @@ while True:
         if hist_tick_data['volume'][49]>1 and (SIGNAL_1[2][49])>0 and (SIGNAL_2[2][49]>0)  and invested() == []:
             alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
-                        units= 100,
+                        units= 5000,
                         side='buy',
                         type='market',
                         takeProfit=round(target_buy,3),
@@ -100,7 +86,7 @@ while True:
         elif hist_tick_data['volume'][49]>1 and (SIGNAL_1[2][49])<0 and (SIGNAL_2[2][49]<0)  and invested() == []:
             alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
-                        units= 100,
+                        units= 5000,
                         side='sell',
                         takeProfit=round(target_sell,3),
                         type='market',
@@ -111,7 +97,7 @@ while True:
             if price_change()==True:
                 alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
-                        units= 100,
+                        units= 5100,
                         side='buy',
                         type='market',
                         takeProfit=round(target_buy,3),
@@ -120,7 +106,7 @@ while True:
             else:
                 alpha.create_order(account_id=account_number,
                         instrument='EUR_USD',
-                        units= 100,
+                        units= 5100,
                         side='sell',
                         takeProfit=round(target_sell,3),
                         type='market',
