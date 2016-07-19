@@ -47,11 +47,11 @@ def price_change():    # same as pdiff
 while True:
     try:
         eur_usd = alpha.get_history(instrument="EUR_USD",
-                                      granularity='S5',
-                                      count = 50,)
-        eur_usd_M5 = alpha.get_history(instrument="EUR_USD",
                                       granularity='M1',
-                                      count = 50,)
+                                      count = 100,)
+        eur_usd_M5 = alpha.get_history(instrument="EUR_USD",
+                                      granularity='M5',
+                                      count = 100,)
         hist_tick_data = pd.DataFrame(eur_usd['candles'],
                               ).drop('time',1)
     
@@ -91,7 +91,7 @@ while True:
                         takeProfit=round(target_sell,3),
                         type='market',
                         stopLoss=round(stop_loss_sell,3))
-
+#  Threading might be required 
         elif invested() != [] and SIGNAL_2[1][49]==0:
             alpha.close_position(account_id=account_number,instrument="XAU_USD")
             if price_change()==True:
