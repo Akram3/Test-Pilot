@@ -3,7 +3,7 @@ import oandapy
 import os
 
 class Hawkes(oandapy.Streamer,object):
-    def __init__(self,*,**):
+    def __init__(self,*args,**kwargs):
         oandapy.Streamer.__init__(self,account_number,access_token):
         self.ticks = 0
         self.account_number = os.getenv("practice_number")
