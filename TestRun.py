@@ -4,10 +4,8 @@ import os
 
 class Hawkes(oandapy.Streamer,object):
     def __init__(self,*args,**kwargs):
-        oandapy.Streamer.__init__(self,account_number,access_token):
+        oandapy.Streamer.__init__(self,account_number,access_token)
         self.ticks = 0
-        self.account_number = os.getenv("practice_number")
-        self.access_token = os.getenv("practice_access_token")
 
     def on_success(self, data):
         self.ticks += 1
@@ -49,5 +47,7 @@ class Hawkes(oandapy.Streamer,object):
         return upper,mid,lower
 
 if __name__ == '__main__':
-    stream = Hawkes(environment="practice")
+    account_number = os.getenv("practice_number")
+    access_token = os.getenv("practice_access_token")
+    stream = Hawkes(environment="practice",access_token=access_token)
     stream.start(accountId=account_number, instruments="EUR_USD")
